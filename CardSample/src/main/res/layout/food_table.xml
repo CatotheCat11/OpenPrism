@@ -71,7 +71,7 @@
             android:layout_height="match_parent"
             android:paddingTop="2dp"
             android:paddingBottom="2dp"
-            android:src="@drawable/list_item_circle_blue" />
+            android:src="@drawable/list_item_circle_red" />
 
         <TextView
             android:id="@+id/list_item_3"
