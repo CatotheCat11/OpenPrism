@@ -11,7 +11,7 @@ public class EyeGestureManager {
     }
 
     public static EyeGestureManager from(Context paramContext) {
-        return null;
+        return new EyeGestureManager();
     }
 
     public void activateGazeLogging(boolean paramBoolean) {
