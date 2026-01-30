@@ -75,7 +75,6 @@ public class CardScrollView extends HorizontalScrollView {
           | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
           | View.SYSTEM_UI_FLAG_FULLSCREEN);
 
-      //TODO: get scrollbar working
       setHorizontalScrollBarEnabled(true);
       container = new LinearLayout(context);
       container.setOrientation(LinearLayout.HORIZONTAL);
