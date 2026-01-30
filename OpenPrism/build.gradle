@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.library'
+    id "maven-publish"
+}
+
+android {
+    namespace 'com.google.android.glass'
+    compileSdk 36
+
+    defaultConfig {
+        minSdk 19
+        targetSdk 36
+
+        aarMetadata {
+            minCompileSdk = 19
+        }
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+}
+
+dependencies {
+    implementation libs.appcompat
+    implementation libs.circleimageview
+}
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            groupId = 'com.github.CatotheCat11'
+            artifactId = 'OpenPrism'
+            version = '1.0'
+
+            afterEvaluate {
+                from components.release
+            }
+        }
+    }
+}
