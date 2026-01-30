@@ -9,7 +9,6 @@ android {
 
     defaultConfig {
         minSdk 19
-        targetSdk 36
 
         aarMetadata {
             minCompileSdk = 19
