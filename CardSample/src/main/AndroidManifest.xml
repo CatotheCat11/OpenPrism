@@ -28,6 +28,8 @@
         </activity>
         <activity android:name=".MenuActivity"
             android:exported="true"/>
+        <activity android:name=".FunctionsTestActivity"
+            android:exported="true"/>
     </application>
 
 </manifest>

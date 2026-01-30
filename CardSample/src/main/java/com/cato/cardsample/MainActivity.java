@@ -1,10 +1,12 @@
 package com.cato.cardsample;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.google.android.glass.widget.CardBuilder;
 import com.google.android.glass.widget.CardScrollAdapter;
@@ -36,6 +38,9 @@ public class MainActivity extends Activity {
 
     private void createCards() {
         mCards = new ArrayList<CardBuilder>();
+        mCards.add(new CardBuilder(this, CardBuilder.Layout.MENU)
+                .setText("Test functions")
+                .setIcon(R.drawable.ic_settings));
 
         mCards.add(new CardBuilder(this, CardBuilder.Layout.TEXT)
                 .setText("A stack indicator can be added to the corner of a card to indicate that it represents a bundle of other items.")
@@ -113,9 +118,9 @@ public class MainActivity extends Activity {
                 .setAttributionIcon(R.drawable.ic_smile));
 
         mCards.add(new CardBuilder(this, CardBuilder.Layout.MENU)
-                .setText("Send test notification")
+                .setText("MENU layout")
                 .setIcon(R.drawable.ic_phone)
-                .setFootnote("Click to send notification after 5 seconds"));
+                .setFootnote("Optional menu description"));
 
         mCards.add(new CardBuilder(this, CardBuilder.Layout.EMBED_INSIDE)
                 .setEmbeddedLayout(R.layout.food_table)
@@ -157,10 +162,14 @@ public class MainActivity extends Activity {
     }
 
     private void setupClickListener() {
-        mCardScrollView.setOnItemClickListener(new android.widget.AdapterView.OnItemClickListener() {
+        mCardScrollView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(android.widget.AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i(TAG, "Item clicked: " + position);
+                if (position == 0) {
+                    Intent intent = new Intent(MainActivity.this, FunctionsTestActivity.class);
+                    startActivity(intent);
+                }
             }
         });
     }
