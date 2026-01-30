@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
 import android.widget.TextView;
@@ -343,6 +344,8 @@ public class CardBuilder {
       ImageView imageView4 = layout.findViewById(R.id.card_image_4);
       ImageView imageView5 = layout.findViewById(R.id.card_image_5);
       ImageView[] imageViews = {imageView1, imageView2, imageView3, imageView4, imageView5};
+      LinearLayout imagesBottomRow = layout.findViewById(R.id.card_images_bottom_row);
+      LinearLayout imagesRightColumn = layout.findViewById(R.id.card_images_right_column);
       ImageView iconView = layout.findViewById(R.id.card_icon);
       ImageView stackIndicator = layout.findViewById(R.id.card_stack_indicator);
       ImageView attributionIconView = layout.findViewById(R.id.card_attribution_icon);
@@ -359,7 +362,6 @@ public class CardBuilder {
          stackIndicator.setVisibility(View.GONE);
       }
 
-      //FIXME: Fix image mosaic layout
       for (int i = 0; i < imageViews.length; i++) {
          if (i < images.size()) {
             imageViews[i].setImageDrawable(images.get(i));
@@ -367,6 +369,12 @@ public class CardBuilder {
          } else {
             imageViews[i].setVisibility(View.GONE);
          }
+      }
+      if (images.size() <= 3) {
+         imagesBottomRow.setVisibility(View.GONE);
+      }
+      if (images.size() <= 1) {
+         imagesRightColumn.setVisibility(View.GONE);
       }
 
       if (iconView != null) {

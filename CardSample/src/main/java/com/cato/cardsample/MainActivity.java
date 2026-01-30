@@ -56,9 +56,9 @@ public class MainActivity extends Activity {
                 .setFootnote("This is the footnote")
                 .setTimestamp("just now")
                 .addImage(R.drawable.cat1)
-                //.addImage(R.drawable.cat2)
-                //.addImage(R.drawable.cat3)
-                //.addImage(R.drawable.cat4)
+                .addImage(R.drawable.cat2)
+                .addImage(R.drawable.cat3)
+                .addImage(R.drawable.cat4)
                 .addImage(R.drawable.cat5));
         mCards.add(new CardBuilder(this, CardBuilder.Layout.TEXT_FIXED)
                 .setText("This is the TEXT_FIXED layout. The text size is always the same.")
