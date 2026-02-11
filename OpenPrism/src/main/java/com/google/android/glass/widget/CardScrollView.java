@@ -344,6 +344,20 @@ public class CardScrollView extends HorizontalScrollView {
       return super.onTouchEvent(event);
    }
 
+   @Override
+   public boolean dispatchTouchEvent(MotionEvent event) {
+      boolean handled = super.dispatchTouchEvent(event);
+      boolean activityHandled = ((android.app.Activity) getContext()).onGenericMotionEvent(event);
+      return handled || activityHandled;
+   }
+
+   @Override
+   public boolean dispatchGenericMotionEvent(MotionEvent event) {
+      boolean handled = super.dispatchGenericMotionEvent(event);
+      boolean activityHandled = ((android.app.Activity) getContext()).onGenericMotionEvent(event);
+      return handled || activityHandled;
+   }
+
 
    @Override
    public boolean performClick() {

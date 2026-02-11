@@ -34,7 +34,7 @@ public class GestureDetector {
    }
 
    /** Sets the basic gesture listener. */
-    public GestureDetector setBaseListener(GestureDetector.BaseListener listener) {
+   public GestureDetector setBaseListener(GestureDetector.BaseListener listener) {
       this.mBaseListener = listener;
       return this;
    }
@@ -69,12 +69,66 @@ public class GestureDetector {
       return this;
    }
 
+   private float startTouchX;
+   private float startTouchY;
+   private int fingerCount = 0;
    /**
     * Processes a motion event, returning {@code true} if events should always be consumed or if a gesture was detected.
     * @return reflects whether touch event is consumed
     */
    public boolean onMotionEvent(MotionEvent event) {
-      return true;
+      //TODO: Detect long presses
+      //Log.d("OpenPrism", "onMotionEvent called");
+      if (mBaseListener == null) return false;
+      Gesture gesture = null;
+      //Log.d("OpenPrism", "Pointer count: " + event.getPointerCount());
+      //Log.d("OpenPrism", "Action:" + event.getAction());
+      if (event.getPointerCount() > fingerCount) fingerCount = event.getPointerCount();
+      if (event.getAction() == MotionEvent.ACTION_DOWN) {
+         startTouchX = event.getX(0);
+         startTouchY = event.getY(0);
+         return false;
+      } else if (event.getAction() == MotionEvent.ACTION_UP && event.getPointerCount() == 1) {
+         //Log.d("OpenPrism", "ACTION_UP total fingers:" + fingerCount);
+         if (event.getX(0) - startTouchX > 50) {
+            if (fingerCount == 1) {
+               gesture = Gesture.SWIPE_RIGHT;
+            } else if (fingerCount == 2) {
+               gesture = Gesture.TWO_SWIPE_RIGHT;
+            }
+         } else if (event.getX(0) - startTouchX < -50) {
+            if (fingerCount == 1) {
+               gesture = Gesture.SWIPE_LEFT;
+            } else if (fingerCount == 2) {
+               gesture = Gesture.TWO_SWIPE_LEFT;
+            }
+         } else if (event.getY(0) - startTouchY > 50) {
+            if (fingerCount == 1) {
+               gesture = Gesture.SWIPE_DOWN;
+            } else if (fingerCount == 2) {
+               gesture = Gesture.TWO_SWIPE_DOWN;
+            }
+         } else if (event.getY(0) - startTouchY < -50) {
+            if (fingerCount == 1) {
+               gesture = Gesture.SWIPE_UP;
+            } else if (fingerCount == 2) {
+               gesture = Gesture.TWO_SWIPE_UP;
+            }
+         } else {
+            // Treat as a tap if there was no significant movement
+            if (fingerCount == 1) {
+               gesture = Gesture.TAP;
+            } else if (fingerCount == 2) {
+               gesture = Gesture.TWO_TAP;
+            } else if (fingerCount == 3) {
+               gesture = Gesture.THREE_TAP;
+            }
+         }
+         fingerCount = 0;
+      }
+      if (gesture != null) {
+         return mBaseListener.onGesture(gesture);
+      } else return false;
    }
 
    public boolean onKeyEvent(int keyCode) {

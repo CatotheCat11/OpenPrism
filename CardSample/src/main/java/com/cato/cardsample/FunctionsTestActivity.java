@@ -11,6 +11,7 @@ import android.graphics.drawable.Icon;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -18,6 +19,8 @@ import android.widget.AdapterView;
 import com.google.android.glass.app.ContextualNotification;
 import com.google.android.glass.eye.EyeGesture;
 import com.google.android.glass.eye.EyeGestureManager;
+import com.google.android.glass.touchpad.Gesture;
+import com.google.android.glass.touchpad.GestureDetector;
 import com.google.android.glass.widget.CardBuilder;
 import com.google.android.glass.widget.CardScrollAdapter;
 import com.google.android.glass.widget.CardScrollView;
@@ -33,6 +36,7 @@ public class FunctionsTestActivity extends Activity {
 
     private EyeGestureManager mEyeGestureManager = null;
     private EyeGestureManager.Listener mEyeGestureListener;
+    private GestureDetector mGestureDetector;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,7 @@ public class FunctionsTestActivity extends Activity {
         mCardScrollView.activate();
         setupClickListener();
         setupEyeGestures();
+        mGestureDetector = createGestureDetector(this);
         setupScrollListener();
         setContentView(mCardScrollView);
     }
@@ -54,6 +59,8 @@ public class FunctionsTestActivity extends Activity {
                 .setText("Send notification"));
         mCards.add(new CardBuilder(this, CardBuilder.Layout.TEXT)
                 .setText("No eye gestures detected yet."));
+        mCards.add(new CardBuilder(this, CardBuilder.Layout.TEXT)
+                .setText("No gestures detected yet."));
     }
 
     private class ExampleCardScrollAdapter extends CardScrollAdapter {
@@ -193,5 +200,70 @@ public class FunctionsTestActivity extends Activity {
                 mAdapter.notifyDataSetChanged();
             }
         };
+    }
+
+    private GestureDetector createGestureDetector(Context context) {
+        GestureDetector gestureDetector = new GestureDetector(context);
+        //Create a base listener for generic gestures
+        gestureDetector.setBaseListener(gesture -> {
+            switch (gesture) {
+                case TAP:
+                    mCards.get(2).setText("Tap detected.");
+                    break;
+                case TWO_TAP:
+                    mCards.get(2).setText("Two tap detected.");
+                    break;
+                case THREE_TAP:
+                    mCards.get(2).setText("Three tap detected.");
+                    break;
+                case LONG_PRESS:
+                    mCards.get(2).setText("Long press detected.");
+                    break;
+                case TWO_LONG_PRESS:
+                    mCards.get(2).setText("Two long press detected.");
+                    break;
+                case THREE_LONG_PRESS:
+                    mCards.get(2).setText("Three long press detected.");
+                    break;
+                case SWIPE_UP:
+                    mCards.get(2).setText("Swipe up detected.");
+                    break;
+                case TWO_SWIPE_UP:
+                    mCards.get(2).setText("Two swipe up detected.");
+                    break;
+                case SWIPE_DOWN:
+                    mCards.get(2).setText("Swipe down detected.");
+                    break;
+                case TWO_SWIPE_DOWN:
+                    mCards.get(2).setText("Two swipe down detected.");
+                    break;
+                case SWIPE_RIGHT:
+                    mCards.get(2).setText("Swipe right detected.");
+                    break;
+                case TWO_SWIPE_RIGHT:
+                    mCards.get(2).setText("Two swipe right detected.");
+                    break;
+                case SWIPE_LEFT:
+                    mCards.get(2).setText("Swipe left detected.");
+                    break;
+                case TWO_SWIPE_LEFT:
+                    mCards.get(2).setText("Two swipe left detected.");
+                    break;
+                default:
+                    Log.e(TAG, "Unknown gesture detected");
+            }
+            mAdapter.notifyDataSetChanged();
+            return true;
+        });
+        return gestureDetector;
+    }
+    /* Send generic motion events to the gesture detector */
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        if (mGestureDetector != null) {
+            boolean handled = mGestureDetector.onMotionEvent(event);
+            return handled;
+        }
+        return false;
     }
 }
