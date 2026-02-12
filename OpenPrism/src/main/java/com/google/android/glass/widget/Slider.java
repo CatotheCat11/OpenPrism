@@ -176,17 +176,16 @@ public class Slider {
 
             @Override
             public void show() {
-               sliderBar = new ProgressBar(sliderView.getContext(), null, android.R.attr.progressBarStyleHorizontal);
-               sliderBar.setIndeterminate(true);
-               sliderBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
-               sliderBar.setVisibility(View.VISIBLE);
-               android.widget.FrameLayout.LayoutParams lp =
-                       new android.widget.FrameLayout.LayoutParams(
-                               android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                               android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                               android.view.Gravity.BOTTOM);
-
                if (sliderView != null) {
+                  sliderBar = new ProgressBar(sliderView.getContext(), null, android.R.attr.progressBarStyleHorizontal);
+                  sliderBar.setIndeterminate(true);
+                  sliderBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_IN);
+                  sliderBar.setVisibility(View.VISIBLE);
+                  android.widget.FrameLayout.LayoutParams lp =
+                          new android.widget.FrameLayout.LayoutParams(
+                                  android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                                  android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
+                                  android.view.Gravity.BOTTOM);
                   sliderView.addView(sliderBar, lp);
                }
             }
