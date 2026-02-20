@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 
 /**
  * A gesture detector optimized to recognize touch gestures for the touchpad.
@@ -28,6 +29,7 @@ import android.view.MotionEvent;
  */
 public class GestureDetector {
    private GestureDetector.BaseListener mBaseListener;
+   private GestureDetector.ScrollListener mScrollListener;
 
    public GestureDetector(Context context) {
       Log.e("OpenPrism", "Not implemented: GestureDetector(Context)");
@@ -53,7 +55,7 @@ public class GestureDetector {
 
    /** Sets the listener that detects horizontal scrolling independent of the finger count. */
     public GestureDetector setScrollListener(GestureDetector.ScrollListener listener) {
-     Log.e("OpenPrism", "Not implemented: setScrollListener(ScrollListener)");
+     this.mScrollListener = listener;
      return this;
    }
 
@@ -79,8 +81,8 @@ public class GestureDetector {
    public boolean onMotionEvent(MotionEvent event) {
       //TODO: Detect long presses
       //Log.d("OpenPrism", "onMotionEvent called");
-      if (mBaseListener == null) return false;
       Gesture gesture = null;
+      boolean consumed = false;
       //Log.d("OpenPrism", "Pointer count: " + event.getPointerCount());
       //Log.d("OpenPrism", "Action:" + event.getAction());
       if (event.getPointerCount() > fingerCount) fingerCount = event.getPointerCount();
@@ -125,10 +127,19 @@ public class GestureDetector {
             }
          }
          fingerCount = 0;
+      } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+         if (mScrollListener != null && event.getHistorySize() > 0) {
+
+            float displacement = event.getX(0) - startTouchX;
+            float delta = event.getX(0) - event.getHistoricalX(0, event.getHistorySize() - 1);
+            float velocity = delta / (event.getEventTime() - event.getHistoricalEventTime(event.getHistorySize() - 1));
+            if (mScrollListener.onScroll(displacement, delta, velocity)) consumed = true;
+         }
       }
-      if (gesture != null) {
-         return mBaseListener.onGesture(gesture);
-      } else return false;
+      if (gesture != null && mBaseListener != null) {
+         if (mBaseListener.onGesture(gesture)) consumed = true;
+      }
+      return consumed;
    }
 
    public boolean onKeyEvent(int keyCode) {

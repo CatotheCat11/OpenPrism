@@ -255,6 +255,13 @@ public class FunctionsTestActivity extends Activity {
             mAdapter.notifyDataSetChanged();
             return true;
         });
+        gestureDetector.setScrollListener(new GestureDetector.ScrollListener() {
+            @Override
+            public boolean onScroll(float displacement, float delta, float velocity) {
+                Log.d(TAG, "Scroll detected. Displacement: " + displacement + ", Delta: " + delta + ", Velocity: " + velocity);
+                return true;
+            }
+        });
         return gestureDetector;
     }
     /* Send generic motion events to the gesture detector */
