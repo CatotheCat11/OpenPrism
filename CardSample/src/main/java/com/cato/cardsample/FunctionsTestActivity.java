@@ -233,6 +233,7 @@ public class FunctionsTestActivity extends Activity {
                     break;
                 case SWIPE_DOWN:
                     mCards.get(2).setText("Swipe down detected.");
+                    finish();
                     break;
                 case TWO_SWIPE_DOWN:
                     mCards.get(2).setText("Two swipe down detected.");
